@@ -1,6 +1,6 @@
 # Imagify: AI-Powered Image Generation 🚀
 
-[![Live Demo](https://imagify-beige-three.vercel.app/)](YOUR_LIVE_DEMO_LINK_HERE)
+[![Live Demo]()]([(https://imagify-beige-three.vercel.app/))]
 
 Imagify is a full-stack web application that allows users to bring their creative ideas to life by generating unique images with the power of AI. It features a seamless credit-based system for image generation and a secure authentication system.
 
