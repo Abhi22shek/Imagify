@@ -5,7 +5,7 @@ import userModel from '../models/userModel.js'
 
 // Controller function to generate image from prompt
 // http://localhost:4000/api/image/generate-image
-export const generateImage = async (req, res) => {
+export const generateImage = async (req, res, next) => {
 
   try {
 
@@ -46,7 +46,6 @@ export const generateImage = async (req, res) => {
     res.json({ success: true, message: "Background Removed", resultImage, creditBalance: user.creditBalance - 1 })
 
   } catch (error) {
-    console.log(error.message)
-    res.json({ success: false, message: error.message })
+    next(error)
   }
 }
