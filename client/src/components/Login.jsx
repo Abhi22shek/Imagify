@@ -77,7 +77,7 @@ const Login = () => {
 
                 <h1 className='text-center text-2xl text-text-primary font-medium'>{state}</h1>
 
-                <p className='text-sm'>Welcome back! Please sign in to continue</p>
+                <p className='text-sm text-text-secondary'>Welcome back! Please sign in to continue</p>
 
                 {state !== 'Login' && <div className='border border-secondary bg-secondary px-6 py-2 flex items-center gap-2 rounded-full mt-5'>
                     <img src={assets.email_icon} alt="" />

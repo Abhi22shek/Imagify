@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { AppContext } from "./context";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const AppContext = createContext()
 
 const AppContextProvider = (props) => {
 

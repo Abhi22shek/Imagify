@@ -19,7 +19,7 @@ const App = () => {
 
   return (
     <div className='px-4 sm:px-10 md:px-14 lg:px-28 min-h-screen bg-background'>
-      <ToastContainer position='bottom-right' />
+      <ToastContainer position='bottom-right' theme='dark' />
       <Navbar />
       {showLogin && <Login />}
       <Routes>
