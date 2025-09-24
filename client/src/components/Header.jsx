@@ -37,7 +37,7 @@ const Header = () => {
             </motion.div>
 
             <motion.h1
-                className='text-center mx-auto mt-16 text-4xl max-w-[300px] sm:text-7xl sm:max-w-[590px] text-text-primary'
+                className='text-center mx-auto mt-16 text-4xl max-w-[300px] sm:text-7xl sm:max-w-[590px] text-text-primary font-bold'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4, duration: 2 }}
@@ -46,7 +46,7 @@ const Header = () => {
             </motion.h1>
 
             <motion.p
-                className='text-center max-w-xl mx-auto mt-8 text-text-secondary'
+                className='text-center max-w-xl mx-auto mt-8 text-text-secondary text-lg font-light'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
