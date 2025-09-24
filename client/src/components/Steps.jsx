@@ -14,7 +14,7 @@ const Steps = () => {
     >
 
 
-      <h1 className="text-3xl sm:text-4xl font-semibold mb-2 text-text-primary">
+      <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-text-primary">
         How it works
       </h1>
       <p className="text-lg text-text-secondary mb-8">
@@ -26,8 +26,8 @@ const Steps = () => {
           <div key={index} className="flex items-center gap-4 p-5 px-8 bg-primary rounded-lg shadow-md border border-secondary cursor-pointer hover:scale-[1.02] transition-all duration-300" >
             <img width={40} src={item.icon} alt="" />
             <div>
-              <h2 className="text-xl font-medium text-text-primary">{item.title}</h2>
-              <p className="text-text-secondary">
+              <h2 className="text-xl font-semibold text-text-primary">{item.title}</h2>
+              <p className="text-text-secondary font-light">
                 {item.description}
               </p>
             </div>
