@@ -1,12 +1,12 @@
 import axios from 'axios';
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext';
 import { toast } from 'react-toastify';
 
 const Verify = () => {
 
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams] = useSearchParams()
 
     const success = searchParams.get("success")
     const transactionId = searchParams.get("transactionId")
@@ -15,34 +15,32 @@ const Verify = () => {
 
     const navigate = useNavigate()
 
-    // Function to verify stripe payment
-    const verifyStripe = async () => {
+    useEffect(() => {
+        const verifyStripe = async () => {
 
-        try {
+            try {
 
-            const { data } = await axios.post(backendUrl + "/api/user/verify-stripe", { success, transactionId }, { headers: { token } })
+                const { data } = await axios.post(backendUrl + "/api/user/verify-stripe", { success, transactionId }, { headers: { token } })
 
-            if (data.success) {
-                toast.success(data.message)
-                loadCreditsData()
-            } else {
-                toast.error(data.message)
+                if (data.success) {
+                    toast.success(data.message)
+                    loadCreditsData()
+                } else {
+                    toast.error(data.message)
+                }
+
+                navigate("/")
+
+            } catch (error) {
+                toast.error(error.message)
+                console.log(error)
             }
 
-            navigate("/")
-
-        } catch (error) {
-            toast.error(error.message)
-            console.log(error)
         }
-
-    }
-
-    useEffect(() => {
         if (token) {
             verifyStripe()
         }
-    }, [token])
+    }, [token, backendUrl, loadCreditsData, navigate, success, transactionId])
 
     return (
         <div className='min-h-[60vh] flex items-center justify-center'>

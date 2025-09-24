@@ -1,9 +1,9 @@
-import { createContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
-
-export const AppContext = createContext()
+import PropTypes from 'prop-types';
+import { AppContext } from "./context";
 
 const AppContextProvider = (props) => {
 
@@ -16,7 +16,7 @@ const AppContextProvider = (props) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL
     const navigate = useNavigate()
 
-    const loadCreditsData = async () => {
+    const loadCreditsData = useCallback(async () => {
         try {
 
             const { data } = await axios.get(backendUrl + '/api/user/credits', { headers: { token } })
@@ -29,7 +29,7 @@ const AppContextProvider = (props) => {
             console.log(error)
             toast.error(error.message)
         }
-    }
+    }, [backendUrl, token])
 
     const generateImage = async (prompt) => {
         try {
@@ -62,7 +62,7 @@ const AppContextProvider = (props) => {
         if (token) {
             loadCreditsData()
         }
-    },[token])
+    }, [token, loadCreditsData])
 
     const value = {
         token, setToken,
@@ -82,5 +82,9 @@ const AppContextProvider = (props) => {
     )
 
 }
+
+AppContextProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 export default AppContextProvider
