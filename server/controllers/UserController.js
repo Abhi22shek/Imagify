@@ -3,32 +3,17 @@ import transactionModel from "../models/transactionModel.js"
 import razorpay from 'razorpay';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import validator from 'validator'
-import plans from '../configs/plans.js'
 
 
 // API to register user
-const registerUser = async (req, res, next) => {
+const registerUser = async (req, res) => {
 
     try {
         const { name, email, password } = req.body;
 
         // checking for all data to register user
         if (!name || !email || !password) {
-            return res.status(400).json({ success: false, message: 'Missing Details' })
-        }
-
-        if (!validator.isEmail(email)) {
-            return res.status(400).json({ success: false, message: 'Invalid Email' })
-        }
-
-        if (password.length < 8) {
-            return res.status(400).json({ success: false, message: 'Password must be at least 8 characters' })
-        }
-
-        const exist = await userModel.findOne({ email });
-        if (exist) {
-            return res.status(400).json({ success: false, message: 'User already exists' })
+            return res.json({ success: false, message: 'Missing Details' })
         }
 
         // hashing user password
@@ -49,12 +34,13 @@ const registerUser = async (req, res, next) => {
         res.json({ success: true, token, user: { name: user.name } })
 
     } catch (error) {
-        next(error)
+        console.log(error)
+        res.json({ success: false, message: error.message })
     }
 }
 
 // API to login user
-const loginUser = async (req, res, next) => {
+const loginUser = async (req, res) => {
 
     try {
         const { email, password } = req.body;
@@ -74,12 +60,13 @@ const loginUser = async (req, res, next) => {
             res.json({ success: false, message: "Invalid credentials" })
         }
     } catch (error) {
-        next(error)
+        console.log(error)
+        res.json({ success: false, message: error.message })
     }
 }
 
 // API Controller function to get user available credits data
-const userCredits = async (req, res, next) => {
+const userCredits = async (req, res) => {
     try {
 
         const { userId } = req.body
@@ -89,7 +76,8 @@ const userCredits = async (req, res, next) => {
         res.json({ success: true, credits: user.creditBalance, user: { name: user.name } })
 
     } catch (error) {
-        next(error)
+        console.log(error.message)
+        res.json({ success: false, message: error.message })
     }
 }
 
@@ -101,7 +89,7 @@ const razorpayInstance = new razorpay({
 
 
 // Payment API to add credits
-const paymentRazorpay = async (req, res, next) => {
+const paymentRazorpay = async (req, res) => {
     try {
 
         const { userId, planId } = req.body
@@ -113,13 +101,31 @@ const paymentRazorpay = async (req, res, next) => {
             return res.json({ success: false, message: 'Missing Details' })
         }
 
-        const plan = plans[planId]
-        if (!plan) {
-            return res.status(404).json({ success: false, message: 'Plan not found' })
-        }
+        let credits, plan, amount, date
 
-        const { credits, amount } = plan
-        const date = Date.now()
+        // Switch Cases for different plans
+        switch (planId) {
+            case 'Basic':
+                plan = 'Basic'
+                credits = 100
+                amount = 10
+                break;
+
+            case 'Advanced':
+                plan = 'Advanced'
+                credits = 500
+                amount = 50
+                break;
+
+            case 'Business':
+                plan = 'Business'
+                credits = 5000
+                amount = 250
+                break;
+
+            default:
+                return res.json({ success: false, message: 'plan not found' })
+        }
 
         date = Date.now()
 
@@ -152,12 +158,13 @@ const paymentRazorpay = async (req, res, next) => {
         })
 
     } catch (error) {
-        next(error)
+        console.log(error)
+        res.json({ success: false, message: error.message })
     }
 }
 
 // API Controller function to verify razorpay payment
-const verifyRazorpay = async (req, res, next) => {
+const verifyRazorpay = async (req, res) => {
     try {
 
         const { razorpay_order_id } = req.body;
@@ -168,11 +175,8 @@ const verifyRazorpay = async (req, res, next) => {
         // Checking for payment status
         if (orderInfo.status === 'paid') {
             const transactionData = await transactionModel.findById(orderInfo.receipt)
-            if (!transactionData) {
-                return res.status(404).json({ success: false, message: 'Transaction not found' })
-            }
             if (transactionData.payment) {
-                return res.status(400).json({ success: false, message: 'Payment already verified' })
+                return res.json({ success: false, message: 'Payment Failed' })
             }
 
             // Adding Credits in user data
@@ -190,7 +194,8 @@ const verifyRazorpay = async (req, res, next) => {
         }
 
     } catch (error) {
-        next(error)
+        console.log(error);
+        res.json({ success: false, message: error.message });
     }
 }
 

@@ -4,7 +4,6 @@ import cors from 'cors'
 import userRouter from './routes/userRoutes.js';
 import connectDB from './configs/mongodb.js';
 import imageRouter from './routes/imageRoutes.js';
-import errorHandler from './middlewares/error.js';
 
 // App Config
 const PORT = process.env.PORT || 4000
@@ -24,7 +23,5 @@ app.use('/api/user',userRouter)
 app.use('/api/image',imageRouter)
 
 app.get('/', (req,res) => res.send("API Working"))
-
-app.use(errorHandler)
 
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
